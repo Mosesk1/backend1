@@ -63,35 +63,21 @@ export const getOneArticle =(req, res, next) => {
 
 
 export const modifyArticle = async (req, res, next) => {
-
-    Article.findOne({
-        _id: req.params.id
-    }).then(
-        (article) => {
-                res.status(200).json(article)
-        }
-    ).catch(
-        (error) => {
-            res.status(404).json({
-                error: error
-            });
-        }
-    );
+    let id= req.params.id
     if(!req.body.title) res.article.title = req.body.title
     if(!req.body.content) res.article.content = req.body.content
     if(!req.body.imageUrl) res.article.imageUrl = req.body.imageUrl
     try {
-        const updatedArticle = await res.article.save().then(
-            () => {
+        const updatedArticle = await Article.findByIdAndUpdate(id, req.body, {new:true})
         res.status(201).json(updatedArticle)
-            })
     } catch (error) {
         res.status(400).json({message: error.message})
     }
    
 };
 
-export const deleteArticle = (req, res, next) =>{ 
+
+export const deleteArticle = (req, res, next) =>{
     Article.findOne({ _id: req.params.id }).then(
         (article) => {
             if (!article){
