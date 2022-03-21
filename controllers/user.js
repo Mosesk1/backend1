@@ -65,8 +65,10 @@ export const signup = async (req, res) => {
        const savedUser = await user.save();
        const token = signToken(savedUser._id);
         const data = {
-            token,
-            savedUser,
+            // token,
+            message:"User registered",
+            "firstName": req.body.firstName,"lastName": req.body.lastName,
+            "email": req.body.email,"roles": req.body.roles
         };
        res.status(201).json(data);
    } catch (error) {

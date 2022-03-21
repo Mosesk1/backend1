@@ -31,7 +31,8 @@ export const createArticle = (req, res, next) => {
     article.save().then(
       () => {
         res.status(201).json({
-          article: 'Article saved successfully!'
+          article: 'Article saved successfully!',
+          "data" : { "userId" : req.body.userId, "title" : req.body.title, "content" : req.body.content,"imageUrl": req.body.imageUrl }
 
         });
       }
@@ -71,7 +72,10 @@ export const modifyArticle = async (req, res, next) => {
         const updatedArticle = await Article.findByIdAndUpdate(id, req.body, {new:true})
         res.status(201).json(updatedArticle)
     } catch (error) {
-        res.status(400).json({message: error.message})
+        res.status(400).json({
+            message: error.message,
+            data: 'failed to'
+        })
     }
    
 };
@@ -82,19 +86,23 @@ export const deleteArticle = (req, res, next) =>{
         (article) => {
             if (!article){
                return res.status(404).json({
-                    error: new Error('No such article')
+                    "status" : "fail",
+                    "result" : { "article":"No such article"}
                 });
             }
             Article.deleteOne({_id: req.params.id}).then(
                 () => {
                     res.status(200).json({
-                        article: 'Deleted'
+                        article: 'Deleted',
+                        data: null
                     });
                 }
             ).catch(
                 (error) => {
                    res.status(401).json({
-                       error: error
+                       error: new Error('No such article'),
+                       "status" : "fail",
+                       "data" : { "title" : "A title is required" }
                    });
                 }
             );

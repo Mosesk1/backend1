@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
+import swaggerJsDoc from 'swagger-jsdoc'
+import swaggerUI from 'swagger-ui-express'
 import router from "./routers/userrouter.js";
 import blogRouter from "./routers/blogsrouter.js";
 import homeRouter from "./routers/homepage.js";
@@ -26,4 +28,38 @@ app.use(homeRouter);
 app.use(msgRouter);
 app.use(comRouter);
 
+// Swagger Info Object
+const swaggerOptions = {
+    swaggerDefinition: {
+      info: {
+        title: 'My blog API Documentation',
+        description: 'Blog API Documentation',
+        contact: {
+          name: 'min'
+        },
+        server: 'http://localhost:3000'
+      }
+    },
+    components: {
+      securitySchemes: {
+        jwt: {
+          type: 'http',
+          scheme: 'bearer',
+          in: 'header',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
+    security: [{
+      jwt: []
+    }],
+    apis: ['./routers/*.js']
+  }
+  
+  const swaggerDocs = swaggerJsDoc(swaggerOptions)
+  app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
+  
+
 app.listen(port, () =>console.log(`server running at ${port}`));
+
+export default app;
