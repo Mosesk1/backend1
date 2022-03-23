@@ -22,14 +22,13 @@ console.log('your DB has been connected');
 const app = express()
 // const cors=require('cors');
 
-
+app.use(cors());
 app.use(express.json());
 app.use(router);
 app.use(blogRouter);
 app.use(homeRouter);
 app.use(msgRouter);
 app.use(comRouter);
-app.use(cors());
 
 // Swagger Info Object
 const swaggerOptions = {
